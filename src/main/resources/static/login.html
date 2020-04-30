@@ -17,7 +17,7 @@
             <td><input type="text" name="password" id="pword"></td>
         </tr>
         <tr>
-            <td><input type="submit" value="登陆"></td>
+            <td><input type="button" onclick="login()" value="登陆"></td>
         </tr>
     </table>
 </form>
@@ -37,8 +37,10 @@
                 "password": password
             },
             success: function (json) {
-
-                location.href = json
+//                if (json.isok){
+//                    location.href = "/index";
+//                }
+                console.info(json)
             },
             error: function (e) {
                 console.info(e)

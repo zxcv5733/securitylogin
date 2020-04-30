@@ -2,7 +2,7 @@ package com.hit.edu;
 
 
 import com.hit.edu.auth.AuthUserDetail;
-import com.hit.edu.dao.UserDetailMaper;
+import com.hit.edu.dao.UserDetailMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class SecurityLoginApplicationTests {
 
 	@Resource
-	UserDetailMaper userDetailMaper;
+	UserDetailMapper userDetailMaper;
 
 	@Test
 	public void contextLoads(){

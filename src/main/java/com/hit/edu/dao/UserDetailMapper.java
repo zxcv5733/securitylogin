@@ -10,7 +10,7 @@ import java.util.List;
  * @author: Li dong.
  * @date: 2020/4/29 - 21:18
  */
-public interface UserDetailMaper {
+public interface UserDetailMapper {
 
     // 根据用户ID查询用户信息
     @Select("SELECT username, password, enabled\n" +

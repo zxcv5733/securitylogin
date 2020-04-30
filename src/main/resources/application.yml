@@ -46,3 +46,8 @@ mybatis:
 logging:
   level:
     com.hit.edu.dao: debug
+
+jwt:
+  secret: dfsfds
+  expiration: 3600000
+  header: JWTHeaderName
