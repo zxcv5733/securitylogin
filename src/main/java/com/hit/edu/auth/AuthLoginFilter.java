@@ -63,7 +63,6 @@ public class AuthLoginFilter extends UsernamePasswordAuthenticationFilter {
                         throw new Exception("密码不能为空");
                     }
                     System.out.println(username);
-                    System.out.println(password);
                     //检测账号、密码是否存在
                     if (userService.checkLogin(username, password)){
                         //将账号、密码装入UsernamePasswordAuthenticationToken中

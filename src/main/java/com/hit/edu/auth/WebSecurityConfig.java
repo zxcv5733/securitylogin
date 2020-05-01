@@ -2,13 +2,14 @@ package com.hit.edu.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import javax.annotation.Resource;
 
@@ -31,6 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     JwtAuthencationTokenFilter jwtAuthencationTokenFilter;
+
+    @Resource
+    AccessHandler accessHandler;
+
+    @Resource
+    AuthEntryPoint authEntryPoint;
 
     /**
      * 注入Bcrypt算法加密
@@ -59,20 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .addFilterBefore(jwtAuthencationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-//                .formLogin()
-//                // 前端发起请求的路径
-//                .loginProcessingUrl("/login")
-//                // 指定页面提交请求的用户名、密码的参数
-//                .usernameParameter("username").passwordParameter("password")
-//                // 成功或失败返回给页面的响应
-//                .successHandler(authSuccessHandler).failureHandler(authFailureHandler)
-//                .and().authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/login").permitAll()
-//                .anyRequest().access("@rbacServiceIpml.hasPermisstion(request, authentication)");
 
-        http.csrf().disable();
+        //第1步：解决跨域问题。cors 预检请求放行,让Spring security 放行所有preflight request（cors 预检请求）
+        http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
+
+        //第2步：让Security永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
+        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().cacheControl();
 
         //第3步：请求权限配置
         //放行注册API请求，其它任何请求都必须经过身份验证.
@@ -84,6 +84,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //第5步：拦截token，并检测。在 UsernamePasswordAuthenticationFilter 之前添加 JwtAuthenticationTokenFilter
         http.addFilterBefore(jwtAuthencationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        //第6步：处理异常情况：认证失败和权限不足
+        http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
 
         //第7步：登录,因为使用前端发送JSON方式进行登录，所以登录模式不设置也是可以的。
         http.formLogin();

@@ -32,7 +32,7 @@ public class AuthUserDetailServiceIpml implements UserDetailsService {
         if (!StringUtils.isEmpty(username)) {
             // 加载用户基础信息
             AuthUserDetail authUserDetail = userDetailMapper.findByUserName(username);
-            if (!Objects.isNull(authUserDetail)) {
+            if (authUserDetail != null) {
                 // 加载用户角色列表
                 List<String> roleCodes = userDetailMapper.findRoleByUserName(username);
                 // 通过用户角色列表加载用户资源权限列表

@@ -63,11 +63,11 @@ public class JwtTokenUtil {
      * @return 是否过期
      */
     public Boolean isTokenExpired(String token) {
-        try {
+        try{
             Claims claims = getClaimsFromToken(token);
             Date expiration = claims.getExpiration();
             return expiration.before(new Date());
-        } catch (Exception e) {
+        }catch (Exception e){
             return false;
         }
     }
@@ -97,8 +97,7 @@ public class JwtTokenUtil {
      * @param userDetails 用户
      * @return 是否有效
      */
-    public Boolean validateToken(String token, UserDetails userDetails) {
-
+    public Boolean validateToken(String token, UserDetails userDetails){
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

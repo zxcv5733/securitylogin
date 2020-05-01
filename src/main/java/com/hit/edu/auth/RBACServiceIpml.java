@@ -1,6 +1,7 @@
 package com.hit.edu.auth;
 
 import com.hit.edu.dao.UserDetailMapper;
+import com.hit.edu.exception.AuthException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -36,10 +37,14 @@ public class RBACServiceIpml {
             List<String> urls = userDetailMapper.findUrlsByUserName(username);
             System.out.println(urls);
             boolean result = urls.stream().anyMatch(url -> antPathMatcher.match(url, request.getRequestURI()));
-            return result;
+            //返回
+            if (result) {
+                return result;
+            }else {
+                throw  new AuthException("您没有访问该API的权限！");
+            }
+        }else {
+            throw  new AuthException("不是UserDetails类型！");
         }
-
-
-        return false;
     }
 }
