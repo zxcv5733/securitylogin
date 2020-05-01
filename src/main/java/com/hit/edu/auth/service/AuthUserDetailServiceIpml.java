@@ -1,5 +1,6 @@
-package com.hit.edu.auth;
+package com.hit.edu.auth.service;
 
+import com.hit.edu.auth.AuthUserDetail;
 import com.hit.edu.dao.UserDetailMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

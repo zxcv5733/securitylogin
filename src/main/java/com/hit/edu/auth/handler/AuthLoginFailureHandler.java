@@ -1,9 +1,11 @@
-package com.hit.edu.auth;
+package com.hit.edu.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.edu.util.DataResponse;
+import com.hit.edu.util.JSONAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +20,14 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class AuthLoginFailureHandler extends JSONAuthentication implements AuthenticationFailureHandler {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         String errorMsg = e.getMessage();
         System.out.println(errorMsg);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(DataResponse.error(e.getMessage())));
+        this.WriteJSON(request, response, DataResponse.error(errorMsg));
         log.info("进入登陆失败处理函数");
     }
 }

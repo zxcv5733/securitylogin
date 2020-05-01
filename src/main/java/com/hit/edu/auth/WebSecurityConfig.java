@@ -1,5 +1,12 @@
 package com.hit.edu.auth;
 
+import com.hit.edu.auth.filter.AuthLoginFilter;
+import com.hit.edu.auth.filter.JwtAuthencationTokenFilter;
+import com.hit.edu.auth.handler.AuthJwtFailureHandler;
+import com.hit.edu.auth.handler.AuthLoginFailureHandler;
+import com.hit.edu.auth.handler.AuthLoginSuccessHandler;
+import com.hit.edu.auth.handler.AuthLogoutSuccessHandler;
+import com.hit.edu.auth.service.AuthUserDetailServiceIpml;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,19 +32,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AuthUserDetailServiceIpml authUserDetailServiceIpml;
 
     @Resource
-    AuthFailureHandler authFailureHandler;
+    AuthLoginFailureHandler authLoginFailureHandler;
 
     @Resource
-    AuthSuccessHandler authSuccessHandler;
+    AuthLoginSuccessHandler authLoginSuccessHandler;
 
     @Resource
     JwtAuthencationTokenFilter jwtAuthencationTokenFilter;
 
     @Resource
-    AccessHandler accessHandler;
+    AuthJwtFailureHandler authJwtFailureHandler;
 
     @Resource
-    AuthEntryPoint authEntryPoint;
+    AuthLogoutSuccessHandler authLogoutSuccessHandler;
 
     /**
      * 注入Bcrypt算法加密
@@ -77,6 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //第3步：请求权限配置
         //放行注册API请求，其它任何请求都必须经过身份验证.
         http.authorizeRequests()
+                .antMatchers("./swagger-ui.html").permitAll()
                 .anyRequest().access("@rbacServiceIpml.hasPermisstion(request, authentication)");
 
         //第4步：拦截账号、密码。覆盖 UsernamePasswordAuthenticationFilter过滤器
@@ -86,10 +94,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtAuthencationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         //第6步：处理异常情况：认证失败和权限不足
-        http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
+        http.exceptionHandling().authenticationEntryPoint(authJwtFailureHandler);
 
         //第7步：登录,因为使用前端发送JSON方式进行登录，所以登录模式不设置也是可以的。
         http.formLogin();
+
+        //第8步：退出
+        http.logout().logoutSuccessHandler(authLogoutSuccessHandler);
     }
 
     @Bean
@@ -97,9 +108,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 自定义登陆请求过滤的filter
         AuthLoginFilter authLoginFilter = new AuthLoginFilter();
         // 成功返回给页面的响应
-        authLoginFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        authLoginFilter.setAuthenticationSuccessHandler(authLoginSuccessHandler);
         // 失败返回给页面的响应
-        authLoginFilter.setAuthenticationFailureHandler(authFailureHandler);
+        authLoginFilter.setAuthenticationFailureHandler(authLoginFailureHandler);
         // 交给认证授权的管理
         authLoginFilter.setAuthenticationManager(authenticationManagerBean());
 

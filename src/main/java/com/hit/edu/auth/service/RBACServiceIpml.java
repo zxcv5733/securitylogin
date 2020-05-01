@@ -1,4 +1,4 @@
-package com.hit.edu.auth;
+package com.hit.edu.auth.service;
 
 import com.hit.edu.dao.UserDetailMapper;
 import com.hit.edu.exception.AuthException;
@@ -26,8 +26,6 @@ public class RBACServiceIpml {
      * 判断用户是否具有资源访问权限
     */
     public boolean hasPermisstion (HttpServletRequest request, Authentication authentication){
-
-
         Object principal = authentication.getPrincipal();
         System.out.println("进入动态加载");
         System.out.println(principal);

@@ -1,8 +1,9 @@
-package com.hit.edu.auth;
+package com.hit.edu.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.edu.dao.UserDetailMapper;
 import com.hit.edu.util.DataResponse;
+import com.hit.edu.util.JSONAuthentication;
 import com.hit.edu.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +30,7 @@ import java.util.Set;
  */
 @Component
 @Slf4j
-public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+public class AuthLoginSuccessHandler extends JSONAuthentication implements AuthenticationSuccessHandler {
 
     @Resource
     UserDetailMapper userDetailMapper;
@@ -46,8 +48,8 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 
         List<String> urls = userDetailMapper.findUrlsByUserName(username);
         String token = jwtTokenUtil.generateToken(userDetails);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(DataResponse.success(urls, token)));
+
+        this.WriteJSON(request, response, DataResponse.success(urls, token));
         log.info("登陆成功");
     }
 }

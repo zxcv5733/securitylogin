@@ -1,7 +1,8 @@
-package com.hit.edu.auth;
+package com.hit.edu.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.edu.util.DataResponse;
+import com.hit.edu.util.JSONAuthentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -18,14 +19,12 @@ import java.io.IOException;
  * 身份校验失败处理器，如 token 错误
  */
 @Component
-public class AuthEntryPoint implements AuthenticationEntryPoint {
+public class AuthJwtFailureHandler extends JSONAuthentication implements AuthenticationEntryPoint {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         System.out.println("token失效或者不正确");
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(DataResponse.error(e.getMessage())));
+        this.WriteJSON(request, response, DataResponse.error(e.getMessage()));
     }
 }

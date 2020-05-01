@@ -49,4 +49,13 @@ public class DataResponse {
         return resultBean;
     }
 
+    public static DataResponse success(Object data) {
+        DataResponse resultBean = new DataResponse();
+        resultBean.setIsok(true);
+        resultBean.setCode(200);
+        resultBean.setMessage("success");
+        resultBean.setData(data);
+        return resultBean;
+    }
+
 }
