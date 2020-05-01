@@ -31,7 +31,6 @@ public class RBACServiceIpml {
             UserDetails userDetails = (UserDetails) principal;
             String username = userDetails.getUsername();
             List<String> urls = userDetailMapper.findUrlsByUserName(username);
-            System.out.println(urls);
             boolean result = urls.stream().anyMatch(url -> antPathMatcher.match(url, request.getRequestURI()));
             //返回
             if (result) {

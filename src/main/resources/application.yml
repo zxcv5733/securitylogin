@@ -43,9 +43,9 @@ mybatis:
     map-underscore-to-camel-case: true
 
 # 设置日志扫描的等级
-logging:
-  level:
-    com.hit.edu.dao: debug
+#logging:
+#  level:
+#    com.hit.edu.dao: debug
 
 jwt:
   secret: dfsfds

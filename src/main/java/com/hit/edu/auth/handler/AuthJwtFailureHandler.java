@@ -1,6 +1,6 @@
 package com.hit.edu.auth.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.hit.edu.util.DataResponse;
 import com.hit.edu.util.JSONAuthentication;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +27,6 @@ public class AuthJwtFailureHandler extends JSONAuthentication implements Authent
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         this.WriteJSON(request, response, DataResponse.error(e.getMessage()));
-        log.info("token失效或者不正确");
+        log.info("token失效或者不正确 {}",e.getMessage());
     }
 }

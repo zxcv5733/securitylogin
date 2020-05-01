@@ -3,7 +3,6 @@ package com.hit.edu.auth.service;
 import com.hit.edu.auth.AuthUserDetail;
 import com.hit.edu.dao.UserDetailMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
