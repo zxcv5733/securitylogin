@@ -28,6 +28,6 @@ public class AuthLoginFailureHandler extends JSONAuthentication implements Authe
         String errorMsg = e.getMessage();
         System.out.println(errorMsg);
         this.WriteJSON(request, response, DataResponse.error(errorMsg));
-        log.info("进入登陆失败处理函数");
+        log.info("登陆认证失败");
     }
 }

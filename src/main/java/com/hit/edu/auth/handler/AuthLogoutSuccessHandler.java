@@ -3,6 +3,7 @@ package com.hit.edu.auth.handler;
 import com.hit.edu.util.DataResponse;
 import com.hit.edu.util.JSONAuthentication;
 import com.hit.edu.util.JwtTokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -21,6 +22,7 @@ import java.io.IOException;
  * 成功退出处理器
  */
 @Component
+@Slf4j
 public class AuthLogoutSuccessHandler extends JSONAuthentication implements LogoutSuccessHandler {
 
     @Resource
@@ -32,7 +34,7 @@ public class AuthLogoutSuccessHandler extends JSONAuthentication implements Logo
         if (!StringUtils.isEmpty(token)) {
             SecurityContextHolder.clearContext();
         }
-        System.out.println("退出成功。。。。。。");
         this.WriteJSON(request,response, DataResponse.success("退出成功"));
+        log.info("退出成功");
     }
 }

@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkLogin(String username, String password) throws Exception {
         AuthUserDetail userDetail = userDetailMapper.findByUserName(username);
-        System.out.println(userDetail);
         if (Objects.isNull(userDetail)){
             //设置友好提示
             throw new Exception("账号不存在，请重新尝试！");

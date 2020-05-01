@@ -84,7 +84,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //第3步：请求权限配置
         //放行注册API请求，其它任何请求都必须经过身份验证.
         http.authorizeRequests()
-                .antMatchers("./swagger-ui.html").permitAll()
                 .anyRequest().access("@rbacServiceIpml.hasPermisstion(request, authentication)");
 
         //第4步：拦截账号、密码。覆盖 UsernamePasswordAuthenticationFilter过滤器

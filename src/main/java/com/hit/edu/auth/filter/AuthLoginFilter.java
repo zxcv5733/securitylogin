@@ -3,6 +3,7 @@ package com.hit.edu.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.edu.exception.AuthException;
 import com.hit.edu.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @author: Li dong.
  * @date: 2020/4/30 - 19:14
  */
+@Slf4j
 public class AuthLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private static ObjectMapper mapper = new ObjectMapper();
@@ -32,7 +34,7 @@ public class AuthLoginFilter extends UsernamePasswordAuthenticationFilter {
         if (request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE)
                 || request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
 
-
+            log.info("进入用户名、密码的过滤器");
             UsernamePasswordAuthenticationToken authRequest = null;
             //取authenticationBean
             Map<String, String> authenticationBean = null;
@@ -65,6 +67,7 @@ public class AuthLoginFilter extends UsernamePasswordAuthenticationFilter {
                         //将账号、密码装入UsernamePasswordAuthenticationToken中
                         authRequest = new UsernamePasswordAuthenticationToken(username, password);
                         setDetails(request, authRequest);
+                        log.info("用户名、密码认证成功");
                         return this.getAuthenticationManager().authenticate(authRequest);
                     }
                 }

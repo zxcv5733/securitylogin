@@ -1,6 +1,7 @@
 package com.hit.edu.auth.filter;
 
 import com.hit.edu.util.JwtTokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ import java.io.IOException;
  * @date: 2020/4/30 - 16:01
  */
 @Component
+@Slf4j
 public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
 
     @Resource
@@ -34,7 +36,7 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = request.getHeader(jwtTokenUtil.getHeader());
-        System.out.println(jwtToken);
+        log.info("进入验证token的过滤器");
         if (!StringUtils.isEmpty(jwtToken)) {
             if (!jwtTokenUtil.isTokenExpired(jwtToken)) {
                 String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -42,17 +44,16 @@ public class JwtAuthencationTokenFilter extends OncePerRequestFilter {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     //验证令牌有效性
                     if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                        System.out.println("进行授权");
                         // 给使用JWT令牌的用户进行授权
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         // 将 authentication 存入 ThreadLocal，方便后续获取用户信息
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                        log.info("token验证成功");
                     }
                 }
             }
         }
-        System.out.println("进入自己的过滤链");
         filterChain.doFilter(request, response);
     }
 

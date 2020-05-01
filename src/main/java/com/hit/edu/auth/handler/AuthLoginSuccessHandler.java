@@ -38,8 +38,6 @@ public class AuthLoginSuccessHandler extends JSONAuthentication implements Authe
     @Resource
     JwtTokenUtil jwtTokenUtil;
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

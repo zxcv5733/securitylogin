@@ -27,8 +27,6 @@ public class RBACServiceIpml {
     */
     public boolean hasPermisstion (HttpServletRequest request, Authentication authentication){
         Object principal = authentication.getPrincipal();
-        System.out.println("进入动态加载");
-        System.out.println(principal);
         if (principal instanceof UserDetails){
             UserDetails userDetails = (UserDetails) principal;
             String username = userDetails.getUsername();

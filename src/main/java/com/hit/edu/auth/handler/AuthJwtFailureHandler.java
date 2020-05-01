@@ -3,6 +3,7 @@ package com.hit.edu.auth.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.edu.util.DataResponse;
 import com.hit.edu.util.JSONAuthentication;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,13 @@ import java.io.IOException;
  * 身份校验失败处理器，如 token 错误
  */
 @Component
+@Slf4j
 public class AuthJwtFailureHandler extends JSONAuthentication implements AuthenticationEntryPoint {
 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        System.out.println("token失效或者不正确");
         this.WriteJSON(request, response, DataResponse.error(e.getMessage()));
+        log.info("token失效或者不正确");
     }
 }

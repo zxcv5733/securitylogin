@@ -48,7 +48,6 @@ public class AuthUserDetailServiceIpml implements UserDetailsService {
                 authUserDetail.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(
                         String.join(",", authorities)
                 ));
-                System.out.println("登陆判断");
                 return authUserDetail;
             }else {
                 throw new UsernameNotFoundException(String.format("%s.这个用户不存在", username));
