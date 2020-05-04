@@ -17,7 +17,7 @@ spring:
     timeBetweenEvictionRunsMillis: 60000
     # 配置一个连接在池中最小生存的时间，单位是毫秒
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 'x' FROM DUAL
+    validationQuery: SELECT 1 FROM DUAL
     #下面这两个配置，可以在每次连接的时候判断一些连接是否有效
     testWhileIdle: true
     # testOnBorrow: true
@@ -37,15 +37,20 @@ spring:
       prefix: /
       suffix: .html
 
-# 驼峰命令法
+
 mybatis:
+# 驼峰命令法
   configuration:
     map-underscore-to-camel-case: true
-
+# 指向mapper的映射文件
+  mapper-locations: com/hit/edu/dao/*Mapper.xml
+  # 给实体类起别名
+#  type-aliases-package: com.gx.qwl.entity
 # 设置日志扫描的等级
-#logging:
-#  level:
-#    com.hit.edu.dao: debug
+logging:
+  level:
+    com.hit.edu.dao: debug
+
 
 jwt:
   secret: dfsfds
